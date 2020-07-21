@@ -48,10 +48,13 @@ material/0 = SubResource( 2 )
 
 [node name="RearWheel" parent="Enemy" index="2"]
 engine_force = 220.0
+[connection signal="body_exited" from="Arena/FallArea" to="." method="_on_FallArea_body_exited"]
 [connection signal="damage" from="Player" to="." method="_on_damage"]
 [connection signal="die" from="Player" to="." method="_on_Player_die"]
 [connection signal="damage" from="Enemy" to="." method="_on_damage"]
 [connection signal="die" from="Enemy" to="." method="_on_Enemy_die"]
+
+[editable path="Arena"]
 
 [editable path="Player"]
 

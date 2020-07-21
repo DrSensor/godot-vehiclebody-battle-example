@@ -28,3 +28,8 @@ func _on_Player_die():
 	$HUD/Player/HealthBar.queue_free()
 	$HUD/Player/Name.text = "You   Lose !!"
 	$Player.queue_free()
+
+
+func _on_FallArea_body_exited(body: Node): if body is VehicleBody:
+	body.global_transform.origin = $Arena/SpawnArea.global_transform.origin
+	body.health -= body.max_damage
