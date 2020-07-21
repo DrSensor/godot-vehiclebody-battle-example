@@ -1,0 +1,15 @@
+# distributions
+public/
+dist/
+*.zip
+
+# godot
+.import
+*.import
+
+# assets
+*.png
+*.wav
+*.obj
+*.mtl
+*.ttf

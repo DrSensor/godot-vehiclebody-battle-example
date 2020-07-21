@@ -1,0 +1,83 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://vehicle.gd" type="Script" id=1]
+[ext_resource path="res://assets/clank-car-crash-collision.wav" type="AudioStream" id=2]
+[ext_resource path="res://assets/enginefoley3-idle.wav" type="AudioStream" id=3]
+
+[sub_resource type="BoxShape" id=7]
+extents = Vector3( 1, 1, 1.5 )
+
+[sub_resource type="CubeMesh" id=1]
+size = Vector3( 2, 2, 3 )
+
+[sub_resource type="SphereMesh" id=3]
+radius = 0.7
+height = 0.8
+
+[sub_resource type="SpatialMaterial" id=4]
+albedo_color = Color( 0.25098, 0.25098, 0.25098, 1 )
+
+[sub_resource type="SphereMesh" id=5]
+radius = 0.9
+height = 1.2
+
+[sub_resource type="SpatialMaterial" id=6]
+albedo_color = Color( 0.25098, 0.25098, 0.25098, 1 )
+
+[node name="VehicleBody" type="VehicleBody"]
+contacts_reported = 2
+contact_monitor = true
+script = ExtResource( 1 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
+shape = SubResource( 7 )
+
+[node name="MeshInstance" type="MeshInstance" parent="CollisionShape"]
+mesh = SubResource( 1 )
+material/0 = null
+
+[node name="FrontWheel" type="VehicleWheel" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, -0.7 )
+use_as_steering = true
+wheel_roll_influence = 0.5
+wheel_radius = 0.7
+
+[node name="MeshInstance" type="MeshInstance" parent="FrontWheel"]
+transform = Transform( -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0, 0, 1, 0, 0, 0 )
+mesh = SubResource( 3 )
+material/0 = SubResource( 4 )
+
+[node name="RearWheel" type="VehicleWheel" parent="."]
+transform = Transform( -1, 0, -3.25841e-07, 0, 1, 0, 3.25841e-07, 0, -1, 0, 0.9, 1 )
+use_as_traction = true
+wheel_radius = 0.9
+
+[node name="MeshInstance" type="MeshInstance" parent="RearWheel"]
+transform = Transform( -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0, 0, 1, 0, 0, 0 )
+mesh = SubResource( 5 )
+material/0 = SubResource( 6 )
+
+[node name="CameraPivot" type="Spatial" parent="."]
+
+[node name="SpringArm" type="SpringArm" parent="CameraPivot"]
+transform = Transform( 1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 6, 3 )
+spring_length = 6.0
+margin = 2.0
+
+[node name="CameraPosition" type="Position3D" parent="CameraPivot/SpringArm"]
+
+[node name="SFX" type="Spatial" parent="."]
+
+[node name="Engine" type="AudioStreamPlayer3D" parent="SFX"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 2 )
+stream = ExtResource( 3 )
+unit_size = 4.0
+max_db = 6.0
+autoplay = true
+
+[node name="Crash" type="AudioStreamPlayer3D" parent="SFX"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
+stream = ExtResource( 2 )
+unit_db = 10.0
+[connection signal="body_entered" from="." to="." method="_on_VehicleBody_body_entered"]

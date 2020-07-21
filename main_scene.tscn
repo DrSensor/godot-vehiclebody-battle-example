@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://battle_arena.tscn" type="PackedScene" id=2]
+[ext_resource path="res://vehicle.tscn" type="PackedScene" id=3]
+
+[sub_resource type="SpatialMaterial" id=1]
+albedo_color = Color( 0.333333, 1, 0, 1 )
+
+[sub_resource type="SpatialMaterial" id=2]
+albedo_color = Color( 1, 0, 0, 1 )
+
+[node name="Spatial" type="Spatial"]
+
+[node name="Arena" parent="." instance=ExtResource( 2 )]
+
+[node name="InterpolatedCamera" type="InterpolatedCamera" parent="."]
+transform = Transform( 0.707107, -0.183013, 0.683013, 0, 0.965926, 0.258819, -0.707107, -0.183013, 0.683013, 25, 10, 25 )
+target = NodePath("../Player/CameraPivot/SpringArm/CameraPosition")
+speed = 2.0
+enabled = true
+
+[node name="Player" parent="." instance=ExtResource( 3 )]
+transform = Transform( 0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 20, 0, 20 )
+engine_force = 220.0
+steering = 15.0
+I_HAVE_CONTROL = true
+
+[node name="MeshInstance" parent="Player/CollisionShape" index="0"]
+material/0 = SubResource( 1 )
+
+[node name="FrontWheel" parent="Player" index="1"]
+steering = 15.0
+
+[node name="RearWheel" parent="Player" index="2"]
+engine_force = 220.0
+
+[node name="Enemy" parent="." instance=ExtResource( 3 )]
+transform = Transform( -0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, -20, 0, -20 )
+engine_force = 220.0
+
+[node name="MeshInstance" parent="Enemy/CollisionShape" index="0"]
+material/0 = SubResource( 2 )
+
+[node name="RearWheel" parent="Enemy" index="2"]
+engine_force = 220.0
+
+[editable path="Player"]
+
+[editable path="Enemy"]
