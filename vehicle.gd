@@ -2,13 +2,14 @@ extends VehicleBody
 
 export var I_HAVE_CONTROL : bool
 
-export var max_damage : int = 200
-export var health : float = 1000 setget set_health
+export var max_damage : int = 500
+export var health : float = 5000 setget set_health
 
 onready var max_steering = steering
 func _ready(): $CameraPivot.set_as_toplevel(true)
 
 signal die
+signal damage
 
 func _physics_process(delta):
 	_player_process()
@@ -31,12 +32,15 @@ func set_health(value: float):
 	health = value ; if health <= 0: emit_signal("die")
 
 
-func _on_VehicleBody_body_entered(body: Node): if body is VehicleBody \
-											  and not $SFX/Crash.playing:
-	var collider_momentum = body.linear_velocity.length() * body.mass
+func _on_body_entered(collider: Node): if collider is VehicleBody \
+									  and not $SFX/Crash.playing:
+	var collider_momentum = collider.linear_velocity.length() * collider.mass
 	var self_momentum = self.linear_velocity.length() * self.mass
-	var damage = clamp(collider_momentum - self_momentum, 0, max_damage)
-	health -= damage
+	var damage = clamp(abs(collider_momentum - self_momentum), 0, max_damage)
+	if collider_momentum > self_momentum: health -= damage
+	elif collider_momentum < self_momentum: collider.health -= damage
+	else: health -= damage ; collider.health -= damage
+	emit_signal("damage")
 
 	$SFX/Crash.unit_size = lerp(0, $SFX/Crash.max_db, damage / max_damage)
 	$SFX/Crash.play()

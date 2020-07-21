@@ -7,7 +7,7 @@
 [sub_resource type="BoxShape" id=7]
 extents = Vector3( 1, 1, 1.5 )
 
-[sub_resource type="CubeMesh" id=1]
+[sub_resource type="CubeMesh" id=2]
 size = Vector3( 2, 2, 3 )
 
 [sub_resource type="SphereMesh" id=3]
@@ -34,7 +34,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
 shape = SubResource( 7 )
 
 [node name="MeshInstance" type="MeshInstance" parent="CollisionShape"]
-mesh = SubResource( 1 )
+mesh = SubResource( 2 )
 material/0 = null
 
 [node name="FrontWheel" type="VehicleWheel" parent="."]
@@ -80,4 +80,4 @@ autoplay = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
 stream = ExtResource( 2 )
 unit_db = 10.0
-[connection signal="body_entered" from="." to="." method="_on_VehicleBody_body_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
